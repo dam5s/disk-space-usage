@@ -2,6 +2,16 @@ import 'package:disk_space_usage/binary_tree.dart';
 import 'package:disk_space_usage/tree_map.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+extension Record<T> on BinaryTree<T> {
+  dynamic toRecord() => switch (this) {
+        Leaf(data: final d, weight: final w) => (data: d, weight: w),
+        Branch(left: final l, right: final r) => (
+            left: l.toRecord(),
+            right: r.toRecord(),
+          )
+      };
+}
+
 void main() {
   test('createTreeMap', () {
     final leaves = [
@@ -28,7 +38,7 @@ void main() {
       ),
     );
 
-    expect(treeMap.root, equals(expectedTreeRoot));
+    expect(treeMap.root.toRecord(), equals(expectedTreeRoot.toRecord()));
   });
 
   test('createTreeMap, single leaf', () {
