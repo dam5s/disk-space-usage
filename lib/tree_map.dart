@@ -6,11 +6,8 @@ class TreeMap<T> {
   const TreeMap(this.root);
 }
 
-
 TreeMap<T> createTreeMap<T>(List<Leaf<T>> leaves) {
-  final sortedLeaves = List.of(leaves as List<BinaryTree<T>>)
-    .toList()
-    // TODO check this is sorting correctly
+  final sortedLeaves = List.of(leaves as List<BinaryTree<T>>).toList()
     ..sort((a, b) => a.weight() - b.weight());
 
   final sortedTrees = <BinaryTree<T>>[];
@@ -22,28 +19,13 @@ TreeMap<T> createTreeMap<T>(List<Leaf<T>> leaves) {
     return false;
   }
 
-  BinaryTree<T>? takeLightestTree() {
-    // TODO see if we can do pattern matching on lists here
-
-    if (sortedLeaves.isEmpty && sortedTrees.isEmpty) {
-      return null;
-    }
-
-    if (sortedLeaves.isEmpty) {
-      // TODO see if we should change sorting order if removeLast is more efficient
-      return sortedTrees.removeAt(0);
-    }
-
-    if (sortedTrees.isEmpty) {
-      return sortedLeaves.removeAt(0);
-    }
-
-    if (sortedLeaves[0].weight() < sortedTrees[0].weight()) {
-      return sortedLeaves.removeAt(0);
-    } else {
-      return sortedTrees.removeAt(0);
-    }
-  }
+  BinaryTree<T>? takeLightestTree() => switch ((sortedLeaves, sortedTrees)) {
+        ([], []) => null,
+        ([], [...]) => sortedTrees.removeAt(0),
+        ([...], []) => sortedLeaves.removeAt(0),
+        ([final leaf, ...], [final tree, ...]) =>
+          leaf.weight() < tree.weight() ? sortedLeaves.removeAt(0) : sortedTrees.removeAt(0),
+      };
 
   BinaryTree<T>? left;
 

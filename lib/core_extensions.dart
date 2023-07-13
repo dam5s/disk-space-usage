@@ -1,14 +1,23 @@
+extension IterableExtensions<T> on Iterable<T> {
+  Iterable<U> tryMap<U>(U? Function(T) mapping) => expand((element) {
+        final mapped = mapping(element);
 
-extension TryMap<T> on Iterable<T> {
+        if (mapped == null) {
+          return [];
+        }
 
-  Iterable<U> tryMap<U>(U? Function(T) mapping) =>
-    expand((element) {
-      final mapped = mapping(element);
+        return [mapped];
+      });
 
-      if (mapped == null) {
+  Iterable<T> filter(bool Function(T) predicate) => expand((element) {
+        if (predicate(element)) {
+          return [element];
+        }
         return [];
-      }
+      });
+}
 
-      return [mapped];
-    });
+extension IterableOfOptionalExtensions<T> on Iterable<T?> {
+
+  Iterable<T> flatten() => filter((e) => e != null).cast<T>();
 }
