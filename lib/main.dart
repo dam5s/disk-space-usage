@@ -1,7 +1,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 
-import 'usage_graph_page.dart';
+import 'disk_space_usage_page.dart';
 
 void main() {
   runApp(const DiskSpaceUsageApp());
@@ -24,7 +24,7 @@ class DiskSpaceUsageApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'DiskSpaceUsage',
+      title: 'Disk Space Usage',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.indigo,
@@ -32,7 +32,7 @@ class DiskSpaceUsageApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const UsageGraphPage(),
+      home: const DiskSpaceUsagePage(),
     );
   }
 }

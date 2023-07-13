@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 
 import 'disk_item.dart';
 import 'disk_item_colors.dart';
+import 'disk_item_navigation.dart';
 
 const double _padding = 4;
 
 class _DiskItemBranchWidget extends StatelessWidget {
-  final BinaryTree<DiskItem> left;
-  final BinaryTree<DiskItem> right;
+  final BinaryTree<ParentedDiskItem> left;
+  final BinaryTree<ParentedDiskItem> right;
   final DiskItemColors colors;
-  final void Function(DiskItem) onDiskItemSelected;
+  final void Function(ParentedDiskItem) onDiskItemSelected;
 
   const _DiskItemBranchWidget({
     required this.left,
@@ -29,7 +30,11 @@ class _DiskItemBranchWidget extends StatelessWidget {
 
         final BoxConstraints(:maxWidth, :maxHeight) = constraints;
 
-        Widget sizedChildWidget({required double width, required double height, required BinaryTree<DiskItem> tree}) {
+        Widget sizedChildWidget({
+          required double width,
+          required double height,
+          required BinaryTree<ParentedDiskItem> tree,
+        }) {
           if (width < 50 || height < 50) {
             return SizedBox(width: width, height: height, child: _BlankDiskItem(colors: colors));
           }
@@ -66,16 +71,16 @@ class _DiskItemBranchWidget extends StatelessWidget {
 }
 
 class _DiskItemTreeWidget extends StatelessWidget {
-  final BinaryTree<DiskItem> tree;
+  final BinaryTree<ParentedDiskItem> tree;
   final DiskItemColors colors;
-  final void Function(DiskItem) onDiskItemSelected;
+  final void Function(ParentedDiskItem) onDiskItemSelected;
 
   const _DiskItemTreeWidget({required this.tree, required this.colors, required this.onDiskItemSelected});
 
   @override
   Widget build(BuildContext context) => switch (tree) {
         Leaf(data: final diskItem) => DiskItemWidget(
-            diskItem: diskItem,
+            parentedDiskItem: diskItem,
             colors: colors,
             onDiskItemSelected: onDiskItemSelected,
           ),
@@ -89,20 +94,25 @@ class _DiskItemTreeWidget extends StatelessWidget {
 }
 
 class _DiskItemDetailsWidget extends StatelessWidget {
-  final DiskItem diskItem;
+  final ParentedDiskItem parentedDiskItem;
   final DiskItemColors colors;
-  final void Function(DiskItem) onDiskItemSelected;
+  final void Function(ParentedDiskItem) onDiskItemSelected;
 
-  const _DiskItemDetailsWidget({required this.diskItem, required this.colors, required this.onDiskItemSelected});
+  const _DiskItemDetailsWidget(
+      {required this.parentedDiskItem, required this.colors, required this.onDiskItemSelected});
 
-  TreeMap<DiskItem> _buildTreeMap(List<DiskItem> items) => createTreeMap(items.map((i) => Leaf(i, i.size)).toList());
+  List<ParentedDiskItem> parentAllChildren(List<DiskItem> children) =>
+      children.map((c) => ParentedDiskItem(c, parent: parentedDiskItem)).toList();
+
+  TreeMap<ParentedDiskItem> _buildTreeMap(List<ParentedDiskItem> items) =>
+      createTreeMap(items.map((i) => Leaf(i, i.diskItem.size)).toList());
 
   @override
-  Widget build(BuildContext context) => switch (diskItem.type) {
+  Widget build(BuildContext context) => switch (parentedDiskItem.diskItem.type) {
         FileDiskItemType() => const SizedBox.shrink(),
         LinkDiskItemType() => const SizedBox.shrink(),
         DirectoryDiskItemType(children: final c) => _DiskItemTreeWidget(
-            tree: _buildTreeMap(c).root,
+            tree: _buildTreeMap(parentAllChildren(c)).root,
             colors: colors,
             onDiskItemSelected: onDiskItemSelected,
           ),
@@ -132,17 +142,19 @@ class _BlankDiskItem extends StatelessWidget {
 }
 
 class DiskItemWidget extends StatelessWidget {
-  final DiskItem diskItem;
+  final ParentedDiskItem parentedDiskItem;
   final DiskItemColors colors;
-  final void Function(DiskItem selectedDiskItem) onDiskItemSelected;
+  final void Function(ParentedDiskItem selectedDiskItem) onDiskItemSelected;
 
-  const DiskItemWidget({super.key, required this.diskItem, required this.colors, required this.onDiskItemSelected});
+  const DiskItemWidget(
+      {super.key, required this.parentedDiskItem, required this.colors, required this.onDiskItemSelected});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
+    final diskItem = parentedDiskItem.diskItem;
 
     return Container(
       padding: const EdgeInsets.all(_padding),
@@ -156,7 +168,7 @@ class DiskItemWidget extends StatelessWidget {
                 shape: MaterialStateProperty.all(const LinearBorder()),
                 padding: MaterialStateProperty.all(const EdgeInsets.all(_padding * 2)),
               ),
-              onPressed: () => onDiskItemSelected(diskItem),
+              onPressed: () => onDiskItemSelected(parentedDiskItem),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -179,7 +191,7 @@ class DiskItemWidget extends StatelessWidget {
               child: ColoredBox(
                 color: colorScheme.background.withOpacity(0.25),
                 child: _DiskItemDetailsWidget(
-                  diskItem: diskItem,
+                  parentedDiskItem: parentedDiskItem,
                   colors: colors,
                   onDiskItemSelected: onDiskItemSelected,
                 ),
