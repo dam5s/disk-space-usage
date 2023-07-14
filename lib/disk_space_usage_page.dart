@@ -1,4 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:disk_space_usage/basic_widgets.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 
@@ -38,23 +39,32 @@ class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
   }
 
   List<Widget> _selectDirectoryWidgets() => [
-        MaterialButton(
-          child: const Text('Select folder'),
-          onPressed: () async {
-            final String? directoryPath = await getDirectoryPath();
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 128, 0, 128),
+          child: ElevatedButton(
+            child: const Text('Select folder'),
+            onPressed: () async {
+              final String? directoryPath = await getDirectoryPath();
 
-            setState(() {
-              if (directoryPath != null) {
-                _diskItemFuture = loadDirectory(directoryPath).then((diskItem) => ParentedDiskItem(diskItem));
-              } else {
-                _diskItemFuture = null;
-              }
-            });
-          },
-        ),
+              setState(() {
+                if (directoryPath != null) {
+                  _diskItemFuture = loadDirectory(directoryPath).then((diskItem) => ParentedDiskItem(diskItem));
+                } else {
+                  _diskItemFuture = null;
+                }
+              });
+            },
+          ),
+        )
       ];
 
-  void _diskItemSelected(ParentedDiskItem selectedDiskItem) {
+  void _navigateHome() {
+    setState(() {
+      _diskItemFuture = null;
+    });
+  }
+
+  void _navigateToDiskItem(ParentedDiskItem selectedDiskItem) {
     setState(() {
       _diskItemFuture = Future.value(selectedDiskItem);
     });
@@ -84,21 +94,27 @@ class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
       item = item.parent;
     }
 
-    return Row(
-      children: itemsInNav
-          .expand((navItem) => <Widget>[
-                const Text('/'),
-                TextButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(const LinearBorder()),
-                    padding: MaterialStateProperty.all(const EdgeInsets.all(20)),
-                  ),
-                  onPressed: () => _diskItemSelected(navItem),
-                  child: Text(navItem.diskItem.name),
-                ),
-              ])
-          .toList(),
+    final navChildren = itemsInNav
+        .expand((navItem) => <Widget>[
+              const Text('/'),
+              SquareTextButton(
+                padding: 20,
+                onPressed: () => _navigateToDiskItem(navItem),
+                child: Text(navItem.diskItem.name),
+              ),
+            ])
+        .toList();
+
+    navChildren.insert(
+      0,
+      SquareTextButton(
+        padding: 20,
+        onPressed: _navigateHome,
+        child: const Icon(Icons.home),
+      ),
     );
+
+    return Row(children: navChildren.toList());
   }
 
   Widget _loadedWidget(BuildContext context, ParentedDiskItem diskItem) => Expanded(
@@ -106,14 +122,14 @@ class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
           color: Theme.of(context).colorScheme.tertiaryContainer,
           child: DiskItemWidget(
             parentedDiskItem: diskItem,
-            onDiskItemSelected: _diskItemSelected,
+            onDiskItemSelected: _navigateToDiskItem,
             colors: DiskItemColors(),
           ),
         ),
       );
 
   Widget _loadingWidget() => Container(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 128),
+        padding: const EdgeInsets.fromLTRB(0, 128, 0, 128),
         child: const SizedBox(width: 32, height: 32, child: CircularProgressIndicator()),
       );
 }

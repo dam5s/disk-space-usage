@@ -1,6 +1,7 @@
 import 'package:disk_space_usage/binary_tree.dart';
 import 'package:disk_space_usage/disk_item_presenter.dart';
 import 'package:disk_space_usage/tree_map.dart';
+import 'package:disk_space_usage/basic_widgets.dart';
 import 'package:flutter/material.dart';
 
 import 'disk_item.dart';
@@ -35,7 +36,7 @@ class _DiskItemBranchWidget extends StatelessWidget {
           required double height,
           required BinaryTree<ParentedDiskItem> tree,
         }) {
-          if (width < 50 || height < 50) {
+          if (width < 100 || height < 100) {
             return SizedBox(width: width, height: height, child: _BlankDiskItem(colors: colors));
           }
 
@@ -163,27 +164,14 @@ class DiskItemWidget extends StatelessWidget {
         child: ColoredBox(
           color: colors.next(context),
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            TextButton(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all(const LinearBorder()),
-                padding: MaterialStateProperty.all(const EdgeInsets.all(_padding * 2)),
-              ),
+            SquareTextButton(
               onPressed: () => onDiskItemSelected(parentedDiskItem),
+              padding: 8,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    diskItem.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.titleSmall,
-                  ),
-                  Text(
-                    DiskItemPresenter.sizeText(diskItem.size),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.bodySmall,
-                  ),
+                  SingleLineText(diskItem.name, style: textTheme.titleSmall),
+                  SingleLineText(DiskItemPresenter.sizeText(diskItem.size), style: textTheme.bodySmall),
                 ],
               ),
             ),
