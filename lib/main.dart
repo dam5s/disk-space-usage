@@ -7,11 +7,8 @@ void main() {
   runApp(const DiskSpaceUsageApp());
 
   doWhenWindowReady(() {
-    const initialSize = Size(1280, 720);
-
     appWindow
-      ..minSize = initialSize
-      ..size = initialSize
+      ..minSize = const Size(600, 500)
       ..alignment = Alignment.center
       ..title = 'Disk Space Usage'
       ..show();

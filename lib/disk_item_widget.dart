@@ -147,8 +147,12 @@ class DiskItemWidget extends StatelessWidget {
   final DiskItemColors colors;
   final void Function(ParentedDiskItem selectedDiskItem) onDiskItemSelected;
 
-  const DiskItemWidget(
-      {super.key, required this.parentedDiskItem, required this.colors, required this.onDiskItemSelected});
+  const DiskItemWidget({
+    super.key,
+    required this.parentedDiskItem,
+    required this.colors,
+    required this.onDiskItemSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
