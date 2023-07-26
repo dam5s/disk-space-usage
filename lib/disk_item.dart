@@ -1,6 +1,5 @@
+import 'dart:async';
 import 'dart:io';
-
-import 'core_extensions.dart';
 
 sealed class DiskItemType {}
 
@@ -23,13 +22,17 @@ class DiskItem {
   DiskItem(this.name, this.size, this.type);
 }
 
-int _size(List<DiskItem> items) =>
-  items.map((child) => child.size).fold(0, (sum, childSize) => sum + childSize);
+int _size(List<DiskItem> items) => items.map((child) => child.size).fold(0, (sum, childSize) => sum + childSize);
 
-Future<DiskItem?> _loadFileSystemEntity(FileSystemEntity entity) async {
+Future<DiskItem> _loadFileSystemEntity(
+  void Function(String path) onProgress,
+  FileSystemEntity entity,
+) async {
   final parentPath = entity.parent.absolute.path;
   final entityPath = entity.absolute.path;
   final name = entityPath.replaceFirst('$parentPath/', '');
+
+  onProgress(entityPath);
 
   switch (entity) {
     case File():
@@ -39,28 +42,29 @@ Future<DiskItem?> _loadFileSystemEntity(FileSystemEntity entity) async {
       }
     case Directory():
       {
-        final maybeChildren = await entity.list()
-            .asyncMap(_loadFileSystemEntity)
-            .toList();
-
-        final children = maybeChildren.filter((e) => e != null).cast<DiskItem>().toList();
+        final children = await entity.list().asyncMap((e) => _loadFileSystemEntity(onProgress, e)).toList();
 
         return DiskItem(
-            name,
-            _size(children),
-            DirectoryDiskItemType(entity.absolute.path, children),
+          name,
+          _size(children),
+          DirectoryDiskItemType(entity.absolute.path, children),
         );
       }
     case Link():
       return DiskItem(name, 0, LinkDiskItemType());
 
     default:
-      return null;
+      return throw Exception('Unsupported FileSystemEntity type');
   }
 }
 
-Future<DiskItem> loadDirectory(String path) async {
+(Stream<String>, Future<DiskItem>) loadDirectory(String path) {
+  final progressController = StreamController<String>();
   final dir = Directory(path);
-  final entity = await _loadFileSystemEntity(dir);
-  return entity!;
+
+  onProgress(String absolutePath) {
+    progressController.sink.add(absolutePath.replaceFirst('$path/', ''));
+  }
+
+  return (progressController.stream, _loadFileSystemEntity(onProgress, dir));
 }

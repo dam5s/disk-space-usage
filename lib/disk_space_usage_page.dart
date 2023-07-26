@@ -17,6 +17,7 @@ class DiskSpaceUsagePage extends StatefulWidget {
 
 class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
   Future<ParentedDiskItem>? _diskItemFuture;
+  Stream<String>? _loadingStream;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,9 @@ class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
 
             setState(() {
               if (directoryPath != null) {
-                _diskItemFuture = loadDirectory(directoryPath).then((diskItem) => ParentedDiskItem(diskItem));
+                final (loadingStream, itemFuture) = loadDirectory(directoryPath);
+                _loadingStream = loadingStream;
+                _diskItemFuture = itemFuture.then((diskItem) => ParentedDiskItem(diskItem));
               } else {
                 _diskItemFuture = null;
               }
@@ -70,9 +73,21 @@ class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
         },
       );
 
-  Widget _loadingWidget() => Container(
-        padding: const EdgeInsets.fromLTRB(0, 128, 0, 128),
-        child: const SizedBox(width: 32, height: 32, child: CircularProgressIndicator()),
+  Widget _loadingWidget() => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            StreamBuilder<String>(
+              stream: _loadingStream ?? const Stream.empty(),
+              builder: (context, snapshot) {
+                final path = snapshot.data ?? '';
+                return Text(path, maxLines: 1, overflow: TextOverflow.ellipsis);
+              },
+            ),
+            const SizedBox(height: 8),
+            const SizedBox(width: 32, height: 32, child: CircularProgressIndicator()),
+          ],
+        ),
       );
 
   Widget _loadedWidget(BuildContext context, ParentedDiskItem diskItem) => Column(
