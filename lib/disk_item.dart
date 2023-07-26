@@ -62,8 +62,18 @@ Future<DiskItem> _loadFileSystemEntity(
   final progressController = StreamController<String>();
   final dir = Directory(path);
 
+  var lastEvent = DateTime.now().subtract(const Duration(minutes: 1));
+
   onProgress(String absolutePath) {
-    progressController.sink.add(absolutePath.replaceFirst('$path/', ''));
+    const debounceDuration = Duration(milliseconds: 50);
+
+    final now = DateTime.now();
+    final threshold = now.subtract(debounceDuration);
+
+    if (lastEvent.isBefore(threshold)) {
+      progressController.sink.add(absolutePath.replaceFirst('$path/', ''));
+      lastEvent = now;
+    }
   }
 
   return (progressController.stream, _loadFileSystemEntity(onProgress, dir));
