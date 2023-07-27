@@ -31,15 +31,15 @@ class _DiskItemBranchWidget extends StatelessWidget {
 
         final BoxConstraints(:maxWidth, :maxHeight) = constraints;
 
+        if (maxWidth < 50 || maxHeight < 50) {
+          return _BlankDiskItem(colors: colors);
+        }
+
         Widget sizedChildWidget({
           required double width,
           required double height,
           required BinaryTree<ParentedDiskItem> tree,
         }) {
-          if (width < 100 || height < 100) {
-            return SizedBox(width: width, height: height, child: _BlankDiskItem(colors: colors));
-          }
-
           return SizedBox(
             width: width,
             height: height,
@@ -161,37 +161,57 @@ class DiskItemWidget extends StatelessWidget {
     final textTheme = theme.textTheme;
     final diskItem = parentedDiskItem.diskItem;
 
-    return Container(
-      padding: const EdgeInsets.all(_padding),
-      child: Container(
-        decoration: _border(context),
-        child: ColoredBox(
-          color: colors.next(context),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            SquareTextButton(
-              onPressed: () => onDiskItemSelected(parentedDiskItem),
-              padding: 8,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SingleLineText(diskItem.name, style: textTheme.titleSmall),
-                  SingleLineText(DiskItemPresenter.sizeText(diskItem.size), style: textTheme.bodySmall),
-                ],
+    return LayoutBuilder(builder: (context, constraints) {
+      final BoxConstraints(:maxWidth, :maxHeight) = constraints;
+
+      if (maxWidth < 80 || maxHeight < 50) {
+        return Container(
+          padding: const EdgeInsets.all(_padding),
+          child: Container(
+            decoration: _border(context),
+            child: ColoredBox(
+              color: colors.next(context),
+              child: SquareTextButton(
+                onPressed: () => onDiskItemSelected(parentedDiskItem),
+                child: const Text(''),
               ),
             ),
-            Expanded(
-              child: ColoredBox(
-                color: colorScheme.background.withOpacity(0.25),
-                child: _DiskItemDetailsWidget(
-                  parentedDiskItem: parentedDiskItem,
-                  colors: colors,
-                  onDiskItemSelected: onDiskItemSelected,
+          ),
+        );
+      }
+
+      return Container(
+        padding: const EdgeInsets.all(_padding),
+        child: Container(
+          decoration: _border(context),
+          child: ColoredBox(
+            color: colors.next(context),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              SquareTextButton(
+                onPressed: () => onDiskItemSelected(parentedDiskItem),
+                padding: 8,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SingleLineText(diskItem.name, style: textTheme.titleSmall),
+                    SingleLineText(DiskItemPresenter.sizeText(diskItem.size), style: textTheme.bodySmall),
+                  ],
                 ),
               ),
-            ),
-          ]),
+              Expanded(
+                child: ColoredBox(
+                  color: colorScheme.background.withOpacity(0.25),
+                  child: _DiskItemDetailsWidget(
+                    parentedDiskItem: parentedDiskItem,
+                    colors: colors,
+                    onDiskItemSelected: onDiskItemSelected,
+                  ),
+                ),
+              ),
+            ]),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
