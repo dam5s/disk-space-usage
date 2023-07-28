@@ -15,14 +15,13 @@ class Branch<T> implements BinaryTree<T> {
 }
 
 extension BinaryTreeExtensions<T> on BinaryTree<T> {
-
   int weight() => switch (this) {
-    Leaf(data: _, weight: final w) => w,
-    Branch(left: final l, right: final r) => l.weight() + r.weight(),
-  };
+        Leaf(data: _, weight: final w) => w,
+        Branch(left: final l, right: final r) => l.weight() + r.weight(),
+      };
 
   int leafCount() => switch (this) {
-    Leaf() => 1,
-    Branch(left: final l, right: final r) => l.leafCount() + r.leafCount(),
-  };
+        Leaf() => 1,
+        Branch(left: final l, right: final r) => l.leafCount() + r.leafCount(),
+      };
 }

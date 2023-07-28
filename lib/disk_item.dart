@@ -21,7 +21,8 @@ class DiskItem {
   DiskItem(this.name, this.size, this.type);
 }
 
-int _size(List<DiskItem> items) => items.map((child) => child.size).fold(0, (sum, childSize) => sum + childSize);
+int _size(List<DiskItem> items) =>
+    items.map((child) => child.size).fold(0, (sum, childSize) => sum + childSize);
 
 Future<DiskItem> _loadFileSystemEntity(
   void Function(String path) onProgress,
@@ -41,7 +42,8 @@ Future<DiskItem> _loadFileSystemEntity(
       }
     case Directory():
       {
-        final children = await entity.list().asyncMap((e) => _loadFileSystemEntity(onProgress, e)).toList();
+        final children =
+            await entity.list().asyncMap((e) => _loadFileSystemEntity(onProgress, e)).toList();
 
         return DiskItem(
           name,

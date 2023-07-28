@@ -5,7 +5,12 @@ class SquareTextButton extends StatelessWidget {
   final void Function() onPressed;
   final Widget child;
 
-  const SquareTextButton({super.key, this.padding = 0, required this.onPressed, required this.child});
+  const SquareTextButton({
+    super.key,
+    this.padding = 0,
+    required this.onPressed,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) => TextButton(
@@ -25,6 +30,10 @@ class SingleLineText extends StatelessWidget {
   const SingleLineText(this.text, {super.key, this.style});
 
   @override
-  Widget build(BuildContext context) =>
-    Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: style);
+  Widget build(BuildContext context) => Text(
+        text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: style,
+      );
 }

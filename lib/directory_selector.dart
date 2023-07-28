@@ -13,10 +13,10 @@ final class SelectedDirectory {
     Stream<String>? loadingPaths,
     Future<ParentedDiskItem>? diskItemFuture,
   }) =>
-    SelectedDirectory(
+      SelectedDirectory(
         loadingPaths: loadingPaths ?? this.loadingPaths,
         diskItemFuture: diskItemFuture ?? this.diskItemFuture,
-    );
+      );
 }
 
 abstract class DirectorySelector {
@@ -34,6 +34,8 @@ final class SystemDirectorySelector implements DirectorySelector {
     final (loadingStream, diskItemFuture) = loadDirectory(directoryPath);
 
     return SelectedDirectory(
-        loadingPaths: loadingStream, diskItemFuture: diskItemFuture.then((diskItem) => ParentedDiskItem(diskItem)));
+      loadingPaths: loadingStream,
+      diskItemFuture: diskItemFuture.then((diskItem) => ParentedDiskItem(diskItem)),
+    );
   }
 }

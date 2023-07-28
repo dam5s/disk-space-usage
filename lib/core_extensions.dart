@@ -18,6 +18,5 @@ extension IterableExtensions<T> on Iterable<T> {
 }
 
 extension IterableOfOptionalExtensions<T> on Iterable<T?> {
-
   Iterable<T> flatten() => filter((e) => e != null).cast<T>();
 }

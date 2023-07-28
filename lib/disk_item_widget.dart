@@ -43,7 +43,11 @@ class _DiskItemBranchWidget extends StatelessWidget {
           return SizedBox(
             width: width,
             height: height,
-            child: _DiskItemTreeWidget(tree: tree, colors: colors, onDiskItemSelected: onDiskItemSelected),
+            child: _DiskItemTreeWidget(
+              tree: tree,
+              colors: colors,
+              onDiskItemSelected: onDiskItemSelected,
+            ),
           );
         }
 
@@ -76,7 +80,11 @@ class _DiskItemTreeWidget extends StatelessWidget {
   final DiskItemColors colors;
   final void Function(ParentedDiskItem) onDiskItemSelected;
 
-  const _DiskItemTreeWidget({required this.tree, required this.colors, required this.onDiskItemSelected});
+  const _DiskItemTreeWidget({
+    required this.tree,
+    required this.colors,
+    required this.onDiskItemSelected,
+  });
 
   @override
   Widget build(BuildContext context) => switch (tree) {
@@ -194,7 +202,10 @@ class DiskItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SingleLineText(diskItem.name, style: textTheme.titleSmall),
-                    SingleLineText(DiskItemPresenter.sizeText(diskItem.size), style: textTheme.bodySmall),
+                    SingleLineText(
+                      DiskItemPresenter.sizeText(diskItem.size),
+                      style: textTheme.bodySmall,
+                    ),
                   ],
                 ),
               ),

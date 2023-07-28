@@ -29,7 +29,9 @@ class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
         title: const Text('Disk Space Usage'),
         flexibleSpace: MoveWindow(),
       ),
-      body: _selectedDirectory == null ? _selectDirectoryWidget() : _diskItemFutureWidget(_selectedDirectory!),
+      body: _selectedDirectory == null
+          ? _selectDirectoryWidget()
+          : _diskItemFutureWidget(_selectedDirectory!),
     );
   }
 
@@ -70,7 +72,9 @@ class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
         future: selectedDirectory.diskItemFuture,
         builder: (context, snapshot) {
           final data = snapshot.data;
-          return data == null ? _loadingWidget(selectedDirectory.loadingPaths) : _loadedWidget(context, data);
+          return data == null
+              ? _loadingWidget(selectedDirectory.loadingPaths)
+              : _loadedWidget(context, data);
         },
       );
 
