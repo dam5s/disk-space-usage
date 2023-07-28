@@ -1,9 +1,9 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:file_selector/file_selector.dart';
+import 'package:disk_space_usage/app_dependencies.dart';
 import 'package:flutter/material.dart';
 
 import 'directory_navigation_bar.dart';
-import 'disk_item.dart';
+import 'directory_selector.dart';
 import 'disk_item_colors.dart';
 import 'disk_item_navigation.dart';
 import 'disk_item_widget.dart';
@@ -16,8 +16,7 @@ class DiskSpaceUsagePage extends StatefulWidget {
 }
 
 class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
-  Future<ParentedDiskItem>? _diskItemFuture;
-  Stream<String>? _loadingStream;
+  SelectedDirectory? _selectedDirectory;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
         title: const Text('Disk Space Usage'),
         flexibleSpace: MoveWindow(),
       ),
-      body: _diskItemFuture == null ? _selectDirectoryWidget() : _diskItemFutureWidget(),
+      body: _selectedDirectory == null ? _selectDirectoryWidget() : _diskItemFutureWidget(_selectedDirectory!),
     );
   }
 
@@ -38,16 +37,12 @@ class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
         child: ElevatedButton(
           child: const Text('Select folder'),
           onPressed: () async {
-            final String? directoryPath = await getDirectoryPath();
+            final appDependencies = context.appDependencies();
+            final selector = appDependencies.directorySelector;
+            final selected = await selector.getDirectoryPath();
 
             setState(() {
-              if (directoryPath != null) {
-                final (loadingStream, itemFuture) = loadDirectory(directoryPath);
-                _loadingStream = loadingStream;
-                _diskItemFuture = itemFuture.then((diskItem) => ParentedDiskItem(diskItem));
-              } else {
-                _diskItemFuture = null;
-              }
+              _selectedDirectory = selected;
             });
           },
         ),
@@ -55,30 +50,36 @@ class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
 
   void _navigateHome() {
     setState(() {
-      _diskItemFuture = null;
+      _selectedDirectory = null;
     });
   }
 
   void _navigateToDiskItem(ParentedDiskItem selectedDiskItem) {
+    final selected = _selectedDirectory;
+
+    if (selected == null) {
+      return;
+    }
+
     setState(() {
-      _diskItemFuture = Future.value(selectedDiskItem);
+      _selectedDirectory = selected.copy(diskItemFuture: Future.value(selectedDiskItem));
     });
   }
 
-  Widget _diskItemFutureWidget() => FutureBuilder(
-        future: _diskItemFuture,
+  Widget _diskItemFutureWidget(SelectedDirectory selectedDirectory) => FutureBuilder(
+        future: selectedDirectory.diskItemFuture,
         builder: (context, snapshot) {
           final data = snapshot.data;
-          return data == null ? _loadingWidget() : _loadedWidget(context, data);
+          return data == null ? _loadingWidget(selectedDirectory.loadingPaths) : _loadedWidget(context, data);
         },
       );
 
-  Widget _loadingWidget() => Center(
+  Widget _loadingWidget(Stream<String> loadingStream) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             StreamBuilder<String>(
-              stream: _loadingStream ?? const Stream.empty(),
+              stream: loadingStream,
               builder: (context, snapshot) {
                 final path = snapshot.data ?? '';
                 return Text(path, maxLines: 1, overflow: TextOverflow.ellipsis);

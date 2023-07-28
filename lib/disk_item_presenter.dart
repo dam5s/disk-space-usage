@@ -12,7 +12,7 @@ class DiskItemPresenter {
       _ when bytes > oneGB => '${formatter.format(bytes / oneGB)} GB',
       _ when bytes > oneMB => '${formatter.format(bytes / oneMB)} MB',
       _ when bytes > oneKB => '${formatter.format(bytes / oneKB)} KB',
-      _ => '${formatter.format(bytes / oneKB)} B',
+      _ => '$bytes B',
     };
   }
 }

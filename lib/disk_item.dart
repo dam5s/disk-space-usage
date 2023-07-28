@@ -6,10 +6,9 @@ sealed class DiskItemType {}
 class FileDiskItemType implements DiskItemType {}
 
 class DirectoryDiskItemType implements DiskItemType {
-  final String path;
   final List<DiskItem> children;
 
-  DirectoryDiskItemType(this.path, this.children);
+  DirectoryDiskItemType(this.children);
 }
 
 class LinkDiskItemType implements DiskItemType {}
@@ -47,7 +46,7 @@ Future<DiskItem> _loadFileSystemEntity(
         return DiskItem(
           name,
           _size(children),
-          DirectoryDiskItemType(entity.absolute.path, children),
+          DirectoryDiskItemType(children),
         );
       }
     case Link():
