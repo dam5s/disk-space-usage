@@ -1,8 +1,13 @@
+import 'package:disk_space_usage/directory_selector.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+
 class Dependencies {
-  Dependencies._();
+  final DirectorySelector directorySelector;
 
-  static final Dependencies _shared = Dependencies._();
-  static Dependencies? testOverrides;
+  Dependencies({required this.directorySelector});
+}
 
-  factory Dependencies.shared() => testOverrides ?? _shared;
+extension DependenciesGetter on BuildContext {
+  Dependencies appDependencies() => Provider.of<Dependencies>(this, listen: false);
 }

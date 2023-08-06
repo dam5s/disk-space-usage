@@ -1,12 +1,12 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:disk_space_usage/app_dependencies.dart';
+import 'package:disk_space_usage/dependencies.dart';
+import 'package:disk_space_usage/disk_item/disk_item_colors.dart';
+import 'package:disk_space_usage/disk_item/disk_item_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'directory_navigation_bar.dart';
 import 'directory_selector.dart';
-import 'disk_item_colors.dart';
-import 'disk_item_navigation.dart';
-import 'disk_item_widget.dart';
+import 'disk_item/disk_item_navigation.dart';
 
 class DiskSpaceUsagePage extends StatefulWidget {
   const DiskSpaceUsagePage({super.key});

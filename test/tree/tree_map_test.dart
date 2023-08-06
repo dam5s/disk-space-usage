@@ -1,5 +1,5 @@
-import 'package:disk_space_usage/binary_tree.dart';
-import 'package:disk_space_usage/tree_map.dart';
+import 'package:disk_space_usage/tree/binary_tree.dart';
+import 'package:disk_space_usage/tree/tree_map.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 extension Record<T> on BinaryTree<T> {

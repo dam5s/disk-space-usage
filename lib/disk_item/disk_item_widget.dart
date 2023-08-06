@@ -1,7 +1,8 @@
-import 'package:disk_space_usage/binary_tree.dart';
-import 'package:disk_space_usage/disk_item_presenter.dart';
-import 'package:disk_space_usage/tree_map.dart';
-import 'package:disk_space_usage/basic_widgets.dart';
+import 'package:disk_space_usage/disk_item/disk_item_presenter.dart';
+import 'package:disk_space_usage/tree/binary_tree.dart';
+import 'package:disk_space_usage/tree/tree_map.dart';
+import 'package:disk_space_usage/widgets/single_line_text.dart';
+import 'package:disk_space_usage/widgets/square_text_button.dart';
 import 'package:flutter/material.dart';
 
 import 'disk_item.dart';

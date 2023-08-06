@@ -1,7 +1,7 @@
-import 'package:disk_space_usage/app_dependencies.dart';
+import 'package:disk_space_usage/dependencies.dart';
 import 'package:disk_space_usage/directory_selector.dart';
-import 'package:disk_space_usage/disk_item.dart';
-import 'package:disk_space_usage/disk_item_navigation.dart';
+import 'package:disk_space_usage/disk_item/disk_item.dart';
+import 'package:disk_space_usage/disk_item/disk_item_navigation.dart';
 import 'package:disk_space_usage/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -35,8 +35,8 @@ void main() {
         )));
     final selector = TestDirectorySelector(selected: selected);
 
-    await tester.pumpWidget(Provider<AppDependencies>(
-      create: (_) => AppDependencies(directorySelector: selector),
+    await tester.pumpWidget(Provider<Dependencies>(
+      create: (_) => Dependencies(directorySelector: selector),
       child: const DiskSpaceUsageApp(),
     ));
 

@@ -1,5 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:disk_space_usage/app_dependencies.dart';
+import 'package:disk_space_usage/dependencies.dart';
 import 'package:disk_space_usage/directory_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 import 'disk_space_usage_page.dart';
 
 void main() {
-  runApp(Provider<AppDependencies>(
-    create: (_) => AppDependencies(
+  runApp(Provider<Dependencies>(
+    create: (_) => Dependencies(
       directorySelector: SystemDirectorySelector(),
     ),
     child: const DiskSpaceUsageApp(),

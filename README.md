@@ -19,7 +19,7 @@ make test
 
 ## Formatting
 
-We use a line length of `100` characters, which is good enough to show two files side by side on a modern 27 inch
+We use a line length of `100` characters, which is good enough to show two files side by side on a modern 27-inch
 screen.
 Line length can be set in Jetbrains IDEs `Preferences > Editor > Code Style > Dart`.
 
