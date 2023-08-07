@@ -8,9 +8,9 @@ class SingleLineText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-    text,
-    maxLines: 1,
-    overflow: TextOverflow.ellipsis,
-    style: style,
-  );
+        text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: style,
+      );
 }

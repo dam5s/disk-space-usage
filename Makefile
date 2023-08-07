@@ -13,5 +13,9 @@ format: ## Format code
 test: ## Run tests
 	flutter test
 
+.PHONY: check-cycles
+check-cycles: ## Test cyclic dependencies
+	dart scripts/check_import_cycles.dart
+
 .PHONY: check
-check: format test ## Check formatting and run tests
+check: format check-cycles test ## Check formatting, cycles and run tests

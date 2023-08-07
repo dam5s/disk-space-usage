@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/square_text_button.dart';
-import 'disk_item/disk_item_navigation.dart';
+import 'package:disk_space_usage/widgets/square_text_button.dart';
+import 'package:disk_space_usage/disk_item/disk_item_navigation.dart';
 
 class DirectoryNavigationBar extends StatefulWidget {
   final ParentedDiskItem diskItem;

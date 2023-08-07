@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'directory_navigation_bar.dart';
 import 'directory_selector.dart';
-import 'disk_item/disk_item_navigation.dart';
+import 'package:disk_space_usage/disk_item/disk_item_navigation.dart';
 
 class DiskSpaceUsagePage extends StatefulWidget {
   const DiskSpaceUsagePage({super.key});

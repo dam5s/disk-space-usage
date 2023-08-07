@@ -1,7 +1,7 @@
 import 'package:file_selector/file_selector.dart' as file_selector;
 
-import 'disk_item/disk_item.dart';
-import 'disk_item/disk_item_navigation.dart';
+import 'package:disk_space_usage/disk_item/disk_item.dart';
+import 'package:disk_space_usage/disk_item/disk_item_navigation.dart';
 
 final class SelectedDirectory {
   final Stream<String> loadingPaths;
