@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'imported_dependency.dart';
+import 'module_dependency.dart';
 import 'module_dependency_graph.dart';
 
 const appPackage = 'disk_space_usage';
@@ -40,5 +41,22 @@ void main() async {
     graph.addAll(validImports);
   }
 
-  print(graph);
+  final cycles = graph.detectCycles();
+
+  if (cycles.isNotEmpty) {
+    stderr.writeln('Detected cycles');
+    for (var cycle in cycles) {
+      cycle.printError();
+    }
+    exit(1);
+  }
+
+  stdout.writeln('No cycle detected');
+}
+
+extension ErrorPrinting on List<ModuleDependency> {
+
+  void printError() {
+    stderr.writeln(path().join(' -> '));
+  }
 }
