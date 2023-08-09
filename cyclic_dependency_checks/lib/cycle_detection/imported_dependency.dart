@@ -1,13 +1,25 @@
+import 'module_dependency.dart';
+
 class ImportedDependency {
+  final String appPackage;
   final SourceFile source;
   final String import;
+  final Module sourceModule;
+  final Module importedModule;
 
-  ImportedDependency._(this.source, this.import);
+  ImportedDependency._(
+    this.appPackage,
+    this.source,
+    this.import,
+    this.sourceModule,
+    this.importedModule,
+  );
 
   @override
   String toString() => 'src: ${source.path}, import: $import';
 
-  static DependencyCreationResult tryCreate(String appPackage, SourceFile source, String importLine) {
+  static DependencyCreationResult tryCreate(
+      String appPackage, SourceFile source, String importLine) {
     final import = importLine.split("'")[1];
     final isStandardLibrary = import.startsWith('dart:');
     final isPackageDependency = import.startsWith('package:');
@@ -28,7 +40,39 @@ class ImportedDependency {
       return DisallowedNestedImport(import);
     }
 
-    return ValidImport(ImportedDependency._(source, import));
+    if (isRelative) {
+      return IgnoredInnerImport(import);
+    }
+
+    final sourceModule = _sourceModule(appPackage, source);
+    final importedModule = _importedModule(appPackage, import, sourceModule);
+
+    if (importedModule == sourceModule) {
+      return IgnoredInnerImport(import);
+    }
+
+    return ValidImport(ImportedDependency._(
+      appPackage,
+      source,
+      import,
+      sourceModule,
+      importedModule,
+    ));
+  }
+
+  static Module _sourceModule(String appPackage, SourceFile source) {
+    final components = source.path.split('/')
+      ..removeLast()
+      ..removeAt(0)
+      ..insert(0, appPackage);
+    final path = components.join('/');
+
+    return Module(path);
+  }
+
+  static Module _importedModule(String appPackage, String import, Module sourceModule) {
+    final components = import.replaceFirst('package:', '').split('/')..removeLast();
+    return Module(components.join('/'));
   }
 }
 
@@ -37,7 +81,6 @@ class SourceFile {
 
   SourceFile(this.path);
 }
-
 
 sealed class DependencyCreationResult {}
 
@@ -63,4 +106,10 @@ class DisallowedNestedImport implements DependencyCreationResult {
   final String import;
 
   DisallowedNestedImport(this.import);
+}
+
+class IgnoredInnerImport implements DependencyCreationResult {
+  final String import;
+
+  IgnoredInnerImport(this.import);
 }

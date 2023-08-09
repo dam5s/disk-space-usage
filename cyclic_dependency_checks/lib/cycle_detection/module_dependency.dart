@@ -6,7 +6,7 @@ class Module {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Module && runtimeType == other.runtimeType && path == other.path;
+      other is Module && runtimeType == other.runtimeType && path == other.path;
 
   @override
   int get hashCode => path.hashCode;
@@ -24,10 +24,10 @@ class ModuleDependency {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is ModuleDependency &&
-              runtimeType == other.runtimeType &&
-              from == other.from &&
-              to == other.to;
+      other is ModuleDependency &&
+          runtimeType == other.runtimeType &&
+          from == other.from &&
+          to == other.to;
 
   @override
   int get hashCode => from.hashCode ^ to.hashCode;

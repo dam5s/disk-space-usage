@@ -32,7 +32,7 @@ class DiskSpaceUsageApp extends StatelessWidget {
       title: 'Disk Space Usage',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
+          seedColor: Colors.blue,
           brightness: MediaQuery.of(context).platformBrightness,
         ),
         useMaterial3: true,
