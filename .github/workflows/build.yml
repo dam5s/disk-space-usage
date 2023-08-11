@@ -13,5 +13,5 @@ jobs:
         with:
           flutter-version: '3.x'
           channel: 'stable'
-      - run: flutter pub get
+      - run: make install
       - run: make check
