@@ -30,9 +30,18 @@ make format
 If your prefer a different line length, feel free to update the `Makefile` to your team's liking
 and have developers configure their IDE as well.
 
+## Checking for cyclic dependencies
+
+Make sure your imports are relative only for files in the same folder, otherwise use `package:` imports.
+Run the make task for checking cycles:
+
+```
+make check-cycles
+```
+
 ## Check before push
 
-To check formatting and run tests before pushing your code
+To check formatting, cyclic dependencies and run tests before pushing your code
 
 ```
 make check
