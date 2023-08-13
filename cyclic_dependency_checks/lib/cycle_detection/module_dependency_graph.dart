@@ -1,8 +1,7 @@
 import 'dart:isolate';
 
-import 'package:cyclic_dependency_checks/cycle_detection/list_extensions.dart';
-
 import 'imported_dependency.dart';
+import 'list_extensions.dart';
 import 'module_dependency.dart';
 
 class ModuleDependencyGraph {

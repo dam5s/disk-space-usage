@@ -40,7 +40,7 @@ test: disk_space_usage/test cyclic_dependency_checks/test ## Run all tests
 
 .PHONY: check-cycles
 check-cycles: ## Test cyclic dependencies
-	cd cyclic_dependency_checks; dart lib/main.dart ../disk_space_usage
+	cd cyclic_dependency_checks; dart run cyclic_dependency_checks ../disk_space_usage
 
 .PHONY: check
 check: format check-cycles test ## Check formatting, cycles and run tests

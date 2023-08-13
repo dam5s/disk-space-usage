@@ -1,9 +1,8 @@
-import 'dart:async';
 import 'dart:io';
 
-import 'cycle_detection/cycle_detector.dart';
-import 'cycle_detection/module_dependency.dart';
-import 'cycle_detection/module_dependency_graph.dart';
+import 'package:cyclic_dependency_checks/cycle_detection/cycle_detector.dart';
+import 'package:cyclic_dependency_checks/cycle_detection/module_dependency.dart';
+import 'package:cyclic_dependency_checks/cycle_detection/module_dependency_graph.dart';
 
 void main(List<String> args) async {
   switch (args) {
@@ -12,7 +11,7 @@ void main(List<String> args) async {
     default:
       throw Exception(
         'Expected exactly only one argument, '
-        'the path to dart package folder as argument',
+            'the path to dart package folder as argument',
       );
   }
 }
