@@ -28,7 +28,7 @@ make format
 ```
 
 If your prefer a different line length, feel free to update the `Makefile` to your team's liking
-and have developers configure Android Studio as well.
+and have developers configure their IDE as well.
 
 ## Check before push
 
