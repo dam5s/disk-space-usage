@@ -13,7 +13,10 @@ void main() async {
 
   String randomLetter() => letters[Random().nextInt(letters.length - 1)];
 
-  await Directory('$packagePath/lib').delete(recursive: true);
+  final libDir = Directory('$packagePath/lib');
+  if (await libDir.exists()) {
+    await libDir.delete(recursive: true);
+  }
 
   letters.forEach((letter1) async {
     letters.forEach((letter2) async {
