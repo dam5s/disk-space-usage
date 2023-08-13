@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'cycle_detection/cycle_detector.dart';
@@ -10,22 +11,28 @@ void main(List<String> args) async {
       await _run(path);
     default:
       throw Exception(
-          'Expected exactly only one argument, the path to dart package folder as argument');
+        'Expected exactly only one argument, '
+        'the path to dart package folder as argument',
+      );
   }
 }
 
 Future _run(String path) async {
+  final stopwatch = Stopwatch()..start();
   final cycles = await CycleDetector().detect(path);
+  stopwatch.stop();
+
+  final formattedTime = stopwatch.elapsed.toString().substring(0, 11);
 
   if (cycles.isNotEmpty) {
-    stderr.writeln('Detected cycles');
+    stderr.writeln('Detected cycles after ${formattedTime}');
     for (var cycle in cycles) {
       cycle.printError();
     }
     exit(1);
   }
 
-  stdout.writeln('No import cycles were detected');
+  stdout.writeln('No import cycles were detected after ${formattedTime}');
 }
 
 extension ErrorPrinting on List<ModuleDependency> {

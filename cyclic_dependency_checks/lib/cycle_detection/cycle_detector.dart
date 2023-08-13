@@ -5,7 +5,7 @@ import 'module_dependency.dart';
 import 'module_dependency_graph.dart';
 
 class CycleDetector {
-  Future<List<List<ModuleDependency>>> detect(String packagePath) async {
+  Future<List<List<ModuleDependency>>> detect(String packagePath, {int? maxDepth}) async {
     final pubspecFile = File('$packagePath/pubspec.yaml');
     final pubspecContent = await pubspecFile.readAsLines();
     final appPackage = pubspecContent.firstOrNull?.replaceFirst('name: ', '');
@@ -39,17 +39,17 @@ class CycleDetector {
         }
       }
 
-      final validImports = importResults.expand<ImportedDependency>((res) {
+      final validImports = importResults.expand((res) {
         if (res is ValidImport) {
           return [res.dependency];
         } else {
-          return [];
+          return <ImportedDependency>[];
         }
       }).toList();
 
       graph.addAll(validImports);
     }
 
-    return graph.detectCycles();
+    return graph.detectCycles(maxDepth: maxDepth);
   }
 }

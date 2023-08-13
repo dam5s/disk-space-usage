@@ -1,3 +1,7 @@
+import 'dart:isolate';
+
+import 'package:cyclic_dependency_checks/cycle_detection/list_extensions.dart';
+
 import 'imported_dependency.dart';
 import 'module_dependency.dart';
 
@@ -15,18 +19,15 @@ class ModuleDependencyGraph {
     ));
   }
 
-  List<List<ModuleDependency>> detectCycles() {
-    final allCycles = <List<ModuleDependency>>[];
+  Future<List<List<ModuleDependency>>> detectCycles({int? maxDepth}) async {
     final moduleCount = _countModules();
+    final actualMaxDepth = maxDepth ?? moduleCount;
 
-    for (var value in _moduleDependencies) {
-      allCycles.addAll(_detectDependencyCycles(
-        [value],
-        maxDepth: moduleCount,
-      ));
-    }
+    final resultsFutures = _moduleDependencies.map((value) => Isolate.run(
+          () => _detectDependencyCycles([value], maxDepth: actualMaxDepth),
+        ));
 
-    return allCycles;
+    return (await Future.wait(resultsFutures)).flatten();
   }
 
   int _countModules() {
@@ -37,26 +38,27 @@ class ModuleDependencyGraph {
     return allModules.length;
   }
 
-  List<List<ModuleDependency>> _detectDependencyCycles(List<ModuleDependency> currentPath,
-      {required int maxDepth, int currentDepth = 0}) {
+  Future<List<List<ModuleDependency>>> _detectDependencyCycles(
+    List<ModuleDependency> currentPath, {
+    required int maxDepth,
+  }) async {
     if (currentPath.hasCycle()) {
       return [currentPath];
     }
 
-    if (currentDepth > maxDepth) {
+    if (currentPath.length - 1 > maxDepth) {
       return [];
     }
 
     final last = currentPath.last;
     final nextOptions = _moduleDependencies.where((dep) => dep.from == last.to);
 
-    return nextOptions
-        .expand((next) => _detectDependencyCycles(
-              List.from(currentPath)..add(next),
-              maxDepth: maxDepth,
-              currentDepth: currentDepth + 1,
-            ))
-        .toList();
+    final resultsFutures = nextOptions.map((next) => _detectDependencyCycles(
+          List.from(currentPath)..add(next),
+          maxDepth: maxDepth,
+        ));
+
+    return (await Future.wait(resultsFutures)).flatten();
   }
 
   @override

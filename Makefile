@@ -15,7 +15,7 @@ cyclic_dependency_checks/format: ## Format cyclic_dependency_checks code
 
 .PHONY: cyclic_dependency_checks/test
 cyclic_dependency_checks/test: ## Run cyclic_dependency_checks tests
-	cd cyclic_dependency_checks; dart test
+	cd cyclic_dependency_checks; dart scripts/generate_big_codebase.dart; dart test
 
 .PHONY: disk_space_usage/install
 disk_space_usage/install: ## Fetch dependencies for disk_space_usage
