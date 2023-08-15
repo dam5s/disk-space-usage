@@ -19,7 +19,10 @@ class ImportedDependency {
   String toString() => 'src: ${source.path}, import: $import';
 
   static DependencyCreationResult tryCreate(
-      String appPackage, SourceFile source, String importLine) {
+    String appPackage,
+    SourceFile source,
+    String importLine,
+  ) {
     final import = importLine.split("'")[1];
     final isStandardLibrary = import.startsWith('dart:');
     final isPackageDependency = import.startsWith('package:');
@@ -70,8 +73,13 @@ class ImportedDependency {
     return Module(path);
   }
 
-  static Module _importedModule(String appPackage, String import, Module sourceModule) {
+  static Module _importedModule(
+    String appPackage,
+    String import,
+    Module sourceModule,
+  ) {
     final components = import.replaceFirst('package:', '').split('/')..removeLast();
+
     return Module(components.join('/'));
   }
 }

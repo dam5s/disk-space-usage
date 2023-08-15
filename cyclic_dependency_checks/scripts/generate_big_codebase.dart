@@ -26,8 +26,9 @@ void main() async {
       await Directory(dirPath).create(recursive: true);
 
       File(filePath).writeAsString(
-          "import 'package:example_big_codebase/${randomLetter()}/${randomLetter()}/file.dart';\n"
-          "import 'package:example_big_codebase/${randomLetter()}/${randomLetter()}/file.dart';\n");
+        "import 'package:example_big_codebase/${randomLetter()}/${randomLetter()}/file.dart';\n"
+        "import 'package:example_big_codebase/${randomLetter()}/${randomLetter()}/file.dart';\n",
+      );
     });
   });
 }
