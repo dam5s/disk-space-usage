@@ -18,17 +18,17 @@ void main() async {
     await libDir.delete(recursive: true);
   }
 
-  letters.forEach((letter1) async {
-    letters.forEach((letter2) async {
+  for (final letter1 in letters) {
+    for (final letter2 in letters) {
       var dirPath = '$packagePath/lib/$letter1/$letter2';
       var filePath = '$dirPath/file.dart';
 
       await Directory(dirPath).create(recursive: true);
 
-      File(filePath).writeAsString(
+      await File(filePath).writeAsString(
         "import 'package:example_big_codebase/${randomLetter()}/${randomLetter()}/file.dart';\n"
         "import 'package:example_big_codebase/${randomLetter()}/${randomLetter()}/file.dart';\n",
       );
-    });
-  });
+    }
+  }
 }
