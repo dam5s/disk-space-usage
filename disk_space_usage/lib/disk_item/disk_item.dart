@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:logger/logger.dart';
+
 sealed class DiskItemType {}
 
 class FileDiskItemType implements DiskItemType {}
@@ -21,8 +23,11 @@ class DiskItem {
   DiskItem(this.name, this.size, this.type);
 }
 
-int _size(List<DiskItem> items) =>
-    items.map((child) => child.size).fold(0, (sum, childSize) => sum + childSize);
+int _size(List<DiskItem> items) => items
+    .map((child) => child.size)
+    .fold(0, (sum, childSize) => sum + childSize);
+
+final _logger = Logger();
 
 Future<DiskItem> _loadFileSystemEntity(
   void Function(String path) onProgress,
@@ -34,6 +39,10 @@ Future<DiskItem> _loadFileSystemEntity(
 
   onProgress(entityPath);
 
+  if (FileSystemEntity.isLinkSync(entityPath)) {
+    return DiskItem(name, 0, LinkDiskItemType());
+  }
+
   switch (entity) {
     case File():
       {
@@ -42,8 +51,18 @@ Future<DiskItem> _loadFileSystemEntity(
       }
     case Directory():
       {
-        final children =
-            await entity.list().asyncMap((e) => _loadFileSystemEntity(onProgress, e)).toList();
+        var children = <DiskItem>[];
+
+        try {
+          children = await entity
+              .list()
+              .asyncMap(
+                (e) => _loadFileSystemEntity(onProgress, e),
+              )
+              .toList();
+        } on Exception {
+          _logger.w('Failed to read children of $entityPath');
+        }
 
         return DiskItem(
           name,
