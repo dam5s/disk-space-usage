@@ -14,7 +14,7 @@ It can be built for Windows, Linux and MacOS.
 ## Running tests
 
 ```
-make test
+make disk_space_usage/test
 ```
 
 ## Formatting
@@ -24,7 +24,7 @@ screen.
 Line length can be set in Jetbrains IDEs `Preferences > Editor > Code Style > Dart`.
 
 ```
-make format
+make disk_space_usage/format
 ```
 
 If your prefer a different line length, feel free to update the `Makefile` to your team's liking
@@ -36,7 +36,7 @@ Make sure your imports are relative only for files in the same folder, otherwise
 Run the make task for checking cycles:
 
 ```
-make check-cycles
+make disk_space_usage/check-cycles
 ```
 
 ## Check before push
