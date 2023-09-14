@@ -1,4 +1,0 @@
-name: example_codebase_with_cycles
-
-environment:
-  sdk: '>=3.0.5 <4.0.0'

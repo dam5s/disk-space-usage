@@ -1,8 +1,0 @@
-name: cyclic_dependency_checks
-description: Cyclic Dependency checks for dart projects
-
-environment:
-  sdk: '>=3.0.5 <4.0.0'
-
-dev_dependencies:
-  test: ^1.24.5

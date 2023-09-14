@@ -23,9 +23,8 @@ class DiskItem {
   DiskItem(this.name, this.size, this.type);
 }
 
-int _size(List<DiskItem> items) => items
-    .map((child) => child.size)
-    .fold(0, (sum, childSize) => sum + childSize);
+int _size(List<DiskItem> items) =>
+    items.map((child) => child.size).fold(0, (sum, childSize) => sum + childSize);
 
 final _logger = Logger();
 
@@ -54,12 +53,8 @@ Future<DiskItem> _loadFileSystemEntity(
         var children = <DiskItem>[];
 
         try {
-          children = await entity
-              .list()
-              .asyncMap(
-                (e) => _loadFileSystemEntity(onProgress, e),
-              )
-              .toList();
+          children =
+              await entity.list().asyncMap((e) => _loadFileSystemEntity(onProgress, e)).toList();
         } on Exception {
           _logger.w('Failed to read children of $entityPath');
         }
