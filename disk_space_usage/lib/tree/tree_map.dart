@@ -7,17 +7,13 @@ class TreeMap<T> {
 }
 
 TreeMap<T> createTreeMap<T>(List<Leaf<T>> leaves) {
-  final sortedLeaves = List.of(leaves as List<BinaryTree<T>>).toList()
-    ..sort((a, b) => a.weight() - b.weight());
-
+  final sortedLeaves = List<BinaryTree<T>>.of(leaves)..sort((a, b) => a.weight() - b.weight());
   final sortedTrees = <BinaryTree<T>>[];
 
-  bool treeIsCompleted() {
-    if (sortedTrees.length == 1) {
-      return sortedTrees[0].leafCount() == leaves.length;
-    }
-    return false;
-  }
+  bool treeIsCompleted() => switch (sortedTrees) {
+        [final tree] => tree.leafCount() == leaves.length,
+        _ => false,
+      };
 
   BinaryTree<T>? takeLightestTree() => switch ((sortedLeaves, sortedTrees)) {
         ([], []) => null,
