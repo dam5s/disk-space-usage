@@ -10,4 +10,4 @@ jobs:
           flutter-version: '3.x'
           channel: 'stable'
       - run: make install
-      - run: make
+      - run: make check

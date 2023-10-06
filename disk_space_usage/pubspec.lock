@@ -109,8 +109,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "release/0.1.0"
-      resolved-ref: "3a36c1245006f53f7a38271a2afd17b868bec2d0"
+      ref: "release/0.2.0"
+      resolved-ref: "3c298b02f75b4378b0b371bbd32156b86ae42bc2"
       url: "https://github.com/dam5s/cyclic_dependency_checks.git"
     source: git
     version: "0.1.0"
