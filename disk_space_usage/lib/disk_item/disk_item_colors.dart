@@ -10,9 +10,9 @@ class DiskItemColors {
     _currentIndex++;
 
     return switch (_currentIndex % 7) {
-      0 => colorScheme.background,
+      0 => colorScheme.surface,
       1 => colorScheme.surface,
-      2 => colorScheme.surfaceVariant,
+      2 => colorScheme.surfaceContainerHighest,
       3 => colorScheme.surfaceTint,
       4 => colorScheme.secondaryContainer,
       5 => colorScheme.tertiaryContainer,

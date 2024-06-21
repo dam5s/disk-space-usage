@@ -34,7 +34,7 @@ Future<DiskItem> _loadFileSystemEntity(
 ) async {
   final parentPath = entity.parent.absolute.path;
   final entityPath = entity.absolute.path;
-  final name = entityPath.replaceFirst('$parentPath/', '');
+  final name = entityPath.replaceFirst('$parentPath${Platform.pathSeparator}', '');
 
   onProgress(entityPath);
 

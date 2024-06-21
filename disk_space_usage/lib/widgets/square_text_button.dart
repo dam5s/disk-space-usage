@@ -15,8 +15,8 @@ class SquareTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => TextButton(
         style: ButtonStyle(
-          shape: MaterialStateProperty.all(const LinearBorder()),
-          padding: MaterialStateProperty.all(EdgeInsets.all(padding)),
+          shape: WidgetStateProperty.all(const LinearBorder()),
+          padding: WidgetStateProperty.all(EdgeInsets.all(padding)),
         ),
         onPressed: onPressed,
         child: child,

@@ -72,18 +72,18 @@ class _DiskSpaceUsagePageState extends State<DiskSpaceUsagePage> {
         future: selectedDirectory.diskItemFuture,
         builder: (context, snapshot) {
           final data = snapshot.data;
-          return data == null
-              ? _loadingWidget(selectedDirectory.loadingPaths)
-              : _loadedWidget(context, data);
+          return data == null ? _loadingWidget(selectedDirectory) : _loadedWidget(context, data);
         },
       );
 
-  Widget _loadingWidget(Stream<String> loadingStream) => Center(
+  Widget _loadingWidget(SelectedDirectory selectedDirectory) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(selectedDirectory.path, maxLines: 1, overflow: TextOverflow.ellipsis),
+            const SizedBox(height: 64),
             StreamBuilder<String>(
-              stream: loadingStream,
+              stream: selectedDirectory.loadingPaths,
               builder: (context, snapshot) {
                 final path = snapshot.data ?? '';
                 return Text(path, maxLines: 1, overflow: TextOverflow.ellipsis);

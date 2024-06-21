@@ -32,7 +32,7 @@ class _DiskItemBranchWidget extends StatelessWidget {
 
         final BoxConstraints(:maxWidth, :maxHeight) = constraints;
 
-        if (maxWidth < 50 || maxHeight < 50) {
+        if (maxWidth < 50 || maxHeight < 60) {
           return _BlankDiskItem(colors: colors);
         }
 
@@ -212,7 +212,7 @@ class DiskItemWidget extends StatelessWidget {
               ),
               Expanded(
                 child: ColoredBox(
-                  color: colorScheme.background.withOpacity(0.25),
+                  color: colorScheme.surface.withOpacity(0.25),
                   child: _DiskItemDetailsWidget(
                     parentedDiskItem: parentedDiskItem,
                     colors: colors,

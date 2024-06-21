@@ -4,16 +4,19 @@ import 'package:disk_space_usage/disk_item/disk_item.dart';
 import 'package:disk_space_usage/disk_item/disk_item_navigation.dart';
 
 final class SelectedDirectory {
+  final String path;
   final Stream<String> loadingPaths;
   final Future<ParentedDiskItem> diskItemFuture;
 
-  SelectedDirectory({required this.loadingPaths, required this.diskItemFuture});
+  SelectedDirectory({required this.path, required this.loadingPaths, required this.diskItemFuture});
 
   SelectedDirectory copy({
+    String? path,
     Stream<String>? loadingPaths,
     Future<ParentedDiskItem>? diskItemFuture,
   }) =>
       SelectedDirectory(
+        path: path ?? this.path,
         loadingPaths: loadingPaths ?? this.loadingPaths,
         diskItemFuture: diskItemFuture ?? this.diskItemFuture,
       );
@@ -34,6 +37,7 @@ final class SystemDirectorySelector implements DirectorySelector {
     final (loadingStream, diskItemFuture) = loadDirectory(directoryPath);
 
     return SelectedDirectory(
+      path: directoryPath,
       loadingPaths: loadingStream,
       diskItemFuture: diskItemFuture.then((diskItem) => ParentedDiskItem(diskItem)),
     );

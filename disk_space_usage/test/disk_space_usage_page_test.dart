@@ -12,6 +12,7 @@ import 'test_support/test_directory_selector.dart';
 void main() {
   testWidgets('Loading some disk items', (WidgetTester tester) async {
     final selected = SelectedDirectory(
+        path: 'C:\\Users\\damo',
         loadingPaths: Stream.value('some/path'),
         diskItemFuture: Future.value(ParentedDiskItem(
           DiskItem(

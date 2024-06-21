@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:disk_space_usage/widgets/square_text_button.dart';
@@ -43,7 +45,7 @@ class _DirectoryNavigationBarState extends State<DirectoryNavigationBar> {
     final navChildren = itemsInNav
         .expand(
           (navItem) => <Widget>[
-            const Text('/'),
+            Text(Platform.pathSeparator),
             SquareTextButton(
               padding: 20,
               onPressed: () => widget.navigateToDiskItem(navItem),
